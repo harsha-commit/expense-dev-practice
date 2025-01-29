@@ -18,14 +18,14 @@ pipeline{
         stage('Init'){
             steps{
                 sh """
-                    for i in 01-vpc/ 02-sg/ 03-vpn/ 05-rds/ 06-app-alb/; do cd $i; do terraform init -reconfigure; cd ..; done
+                    for i in 01-vpc/ 02-sg/ 03-vpn/ 05-rds/ 06-app-alb/; do cd $i; terraform init -reconfigure; cd ..; done
                 """
             }
         }
         stage('Plan'){
             steps{
                 sh """
-                    for i in 01-vpc/ 02-sg/ 03-vpn/ 05-rds/ 06-app-alb/; do cd $i; do terraform plan; cd ..; done
+                    for i in 01-vpc/ 02-sg/ 03-vpn/ 05-rds/ 06-app-alb/; do cd $i; terraform plan; cd ..; done
                 """
             }
         }
@@ -37,7 +37,7 @@ pipeline{
             }
             steps{
                 sh """
-                    for i in 01-vpc/ 02-sg/ 03-vpn/ 05-rds/ 06-app-alb/; do cd $i; do terraform apply -auto-approve; cd ..; done
+                    for i in 01-vpc/ 02-sg/ 03-vpn/ 05-rds/ 06-app-alb/; do cd $i; terraform apply -auto-approve; cd ..; done
                 """
             }
         }
@@ -49,7 +49,7 @@ pipeline{
             }
             steps{
                 sh """
-                    for i in 06-app-alb/ 05-rds/ 03-vpn/ 02-sg/ 01-vpc/; do cd $i; do terraform destroy -auto-approve; cd ..; done
+                    for i in 06-app-alb/ 05-rds/ 03-vpn/ 02-sg/ 01-vpc/; do cd $i; terraform destroy -auto-approve; cd ..; done
                 """
             }
         }
