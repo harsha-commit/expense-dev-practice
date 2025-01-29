@@ -18,16 +18,14 @@ pipeline{
         stage('Init'){
             steps{
                 sh """
-                    cd 01-vpc/
-                    terraform init -reconfigure
+                    for i in 01-vpc/ 02-sg/ 03-vpn/ 05-rds/ 06-app-alb/; do cd $i; do terraform init -reconfigure; cd ..; done
                 """
             }
         }
         stage('Plan'){
             steps{
                 sh """
-                    cd 01-vpc/
-                    terraform plan
+                    for i in 01-vpc/ 02-sg/ 03-vpn/ 05-rds/ 06-app-alb/; do cd $i; do terraform plan; cd ..; done
                 """
             }
         }
