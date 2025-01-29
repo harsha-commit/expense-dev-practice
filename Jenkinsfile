@@ -22,44 +22,60 @@ pipeline{
                 """
             }
         }
-        // stage('Init'){
-        //     steps{
-        //         sh """
-        //             for i in 01-vpc/ 02-sg/ 03-vpn/ 05-rds/ 06-app-alb/; do cd $i; terraform init -reconfigure; cd ..; done
-        //         """
-        //     }
-        // }
-        // stage('Plan'){
-        //     steps{
-        //         sh """
-        //             for i in 01-vpc/ 02-sg/ 03-vpn/ 05-rds/ 06-app-alb/; do cd $i; terraform plan; cd ..; done
-        //         """
-        //     }
-        // }
-        // stage('Apply'){
-        //     when{
-        //         expression{
-        //             params.action == 'apply'
-        //         }
-        //     }
-        //     steps{
-        //         sh """
-        //             for i in 01-vpc/ 02-sg/ 03-vpn/ 05-rds/ 06-app-alb/; do cd $i; terraform apply -auto-approve; cd ..; done
-        //         """
-        //     }
-        // }
-        // stage('Destroy'){
-        //     when{
-        //         expression{
-        //             params.action == 'destroy'
-        //         }
-        //     }
-        //     steps{
-        //         sh """
-        //             for i in 06-app-alb/ 05-rds/ 03-vpn/ 02-sg/ 01-vpc/; do cd $i; terraform destroy -auto-approve; cd ..; done
-        //         """
-        //     }
-        // }
+        stage('Init'){
+            steps{
+                sh """
+                    cd 01-vpc/; terraform init -reconfigure; cd ..
+                    cd 02-sg/; terraform init -reconfigure; cd ..
+                    cd 03-vpn/; terraform init -reconfigure; cd ..
+                    cd 05-rds/; terraform init -reconfigure; cd ..
+                    cd 06-app-alb/; terraform init -reconfigure; cd ..
+                """
+            }
+        }
+        stage('Plan'){
+            steps{
+                sh """
+                    cd 01-vpc/; terraform plan; cd ..
+                    cd 02-sg/; terraform plan; cd ..
+                    cd 03-vpn/; terraform plan; cd ..
+                    cd 05-rds/; terraform plan; cd ..
+                    cd 06-app-alb/; terraform plan; cd ..
+                """
+            }
+        }
+        stage('Apply'){
+            when{
+                expression{
+                    params.action == 'apply'
+                }
+            }
+            steps{
+                sh """
+                    cd 01-vpc/; terraform apply -auto-approve; cd ..
+                    cd 02-sg/; terraform apply -auto-approve; cd ..
+                    cd 03-vpn/; terraform apply -auto-approve; cd ..
+                    cd 05-rds/; terraform apply -auto-approve; cd ..
+                    cd 06-app-alb/; terraform apply -auto-approve; cd ..
+                """
+            }
+        }
+        stage('Destroy'){
+            when{
+                expression{
+                    params.action == 'destroy'
+                }
+            }
+            steps{
+                sh """
+                    cd 06-app-alb/; terraform destroy -auto-approve; cd ..
+                    cd 05-rds/; terraform destroy -auto-approve; cd ..
+                    cd 03-vpn/; terraform destroy -auto-approve; cd ..
+                    cd 02-sg/; terraform destroy -auto-approve; cd ..
+                    cd 01-vpc/; terraform destroy -auto-approve; cd ..  
+                """
+            }
+        }
     }
 
     post{
