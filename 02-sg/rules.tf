@@ -172,3 +172,22 @@ resource "aws_security_group_rule" "web_alb_public_https" {
   security_group_id = module.web_alb.sg_id
   cidr_blocks       = ["0.0.0.0/0"]
 }
+
+# Tools Rules
+resource "aws_security_group_rule" "backend_tools" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = module.backend.sg_id
+  cidr_blocks       = [data.aws_vpc.default.cidr_block]
+}
+
+resource "aws_security_group_rule" "frontend_tools" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = module.frontend.sg_id
+  cidr_blocks       = [data.aws_vpc.default.cidr_block]
+}

@@ -1,0 +1,49 @@
+pipeline{
+    agent{
+        label 'AGENT-1'
+    }
+
+    options{
+        ansiColor('xterm')
+        disableConcurrentBuilds()
+        timeout(time: 30, unit: 'MINUTES')
+    }
+
+    environment{
+        def nexusUrl = "nexus.harshadevops.site"
+    }
+
+    parameters{
+        string(name: 'appVersion', defaultValue: '1.0.0', description: 'What is the Application Version?')
+    }
+
+    stages{
+        stage('Init'){
+            steps{
+                sh """
+                    terraform init -reconfigure
+                """
+            }
+        }
+        stage('Plan'){
+            steps{
+                sh """
+                    terraform plan -var="app_version=${params.appVersion}"
+                """
+            }
+        }
+        stage('Apply'){
+            steps{
+                sh """
+                    terraform apply -auto-approve -var="app_version=${params.appVersion}"
+                """
+            }
+        }
+    }
+
+    post{
+        always{
+            deleteDir()
+        }
+    }
+}
