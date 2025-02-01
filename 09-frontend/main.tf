@@ -59,7 +59,7 @@ resource "null_resource" "frontend" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/frontend.sh",
-      "sudo sh /tmp/frontend.sh frontend ${var.environment}"
+      "sudo sh /tmp/frontend.sh frontend ${var.environment} ${var.app_version}"
     ]
   }
 }

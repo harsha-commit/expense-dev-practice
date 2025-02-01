@@ -20,3 +20,7 @@ variable "frontend_tags" {
 variable "zone_name" {
   default = "harshadevops.site"
 }
+
+variable "app_version" {
+
+}
